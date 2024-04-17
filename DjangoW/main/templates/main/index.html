@@ -1,0 +1,126 @@
+{% load static %}
+<html>
+<head>
+    <title>Главная русская страница путеводителя</title>
+    <style>
+        #map {
+            width: 100%;
+            height: 800px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 3px solid #888;
+            width: 40%;
+        }
+
+        .modal-img {
+            height: 200px;
+            width: 200px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1 align="center">Путеводитель по городу Саранск</h1>
+    <div id="map"></div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class="modal-text">placemark.properties._data.hintContent</h2>
+            <p class="modal-text">placemark.properties._data.modalHTML</p>
+			<img class="modal-img" src="https://avatars.mds.yandex.net/get-altay/4304228/2a00000178aba4ccda87a1e771ff9e4c6a54/L_height" />
+        </div>
+    </div>
+
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script type="text/javascript">
+        ymaps.ready(init);
+
+        function init() {
+            var map = new ymaps.Map("map", {
+                center: [54.19992619, 45.1649129], // Координаты центра карты
+                zoom: 12 // Масштаб карты
+            });
+
+			let placemarks = [
+				new ymaps.Placemark([54.187238, 45.183938], {
+					hintContent: 'Площадь тысячелетия', // Всплывающая подсказка
+					modalHTML: 'Площадь Тысячелетия в Саранске появилась недавно и получила название в честь тысячелетней дружбы русского и мордовского народов. Раньше на этом месте был стадион, а сегодня здесь разместились торговые центры, рестораны, отели, жилые дома и учебные заведения. Главным зданием на площади является "Огарёв Арена" - спортивный комплекс. Неподалеку расположен светомузыкальный фонтан "Звезда Мордовии" и плитка, выложенная в традиционных мордовских узорах. Также здесь стоит "Камень Тысячелетия", на котором изображена старинная карта Мордовии.',
+					modalImg: '{% static 'img/WEBSITE.png' %}'
+				}),
+				new ymaps.Placemark([54.186068, 45.180138], {
+					hintContent: 'Музыкальный театр имени И. М. Яушева', // Всплывающая подсказка
+					modalHTML: 'История Музыкального театра началась в далеком 1935 году. Он был назван в честь мордовского певца Иллариона Максимовича Яушева. Сейчас он пользуется не только популярностью у зрителей, но также и множеством наград с отечественных и зарубежных фестивалей. В 2011 году театр переехал в новое здание, сочетающее в себе национальные мотивы, классический стиль и элементы сценического искусства ',
+					modalImg: '{% static 'img/Без имени.png' %}'
+				})
+			];
+
+            var modal = document.getElementById("myModal");
+            var closeBtn = document.getElementsByClassName("close")[0];
+            closeBtn.onclick = function () {
+                modal.style.display = "none";
+            };
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+			var modalTexts = modal.getElementsByClassName("modal-text");
+			var title = modalTexts[0];
+			var txt = modalTexts[1];
+			var img = modal.getElementsByClassName("modal-img")[0];
+
+			placemarks.forEach((placemark) => {
+				// Добавляем обработчик события на клик по маркеру
+				placemark.events.add('click', function () {
+                    title.innerHTML = placemark.properties.get("hintContent");
+					txt.innerHTML = placemark.properties.get("modalHTML");
+					img.src = placemark.properties.get("modalImg");
+
+					modal.style.display = "block";
+				});
+
+				map.geoObjects.add(placemark);
+			});
+
+            // Добавляем метку на карту
+            //var placemark = new ymaps.Placemark([55.82422, 37.63750], {
+            //    hintContent: 'ВДНХ' // Всплывающая подсказка
+            //});
+
+
+
+        }
+    </script>
+</body>
+</html>

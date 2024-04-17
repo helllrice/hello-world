@@ -1,0 +1,632 @@
+{% load static %}
+<html>
+<head>
+  <title>Главная русская страница путеводителя</title>
+  <style>
+
+        #headLine {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1;
+            overflow: auto;
+            height: 100px;
+            background-color: rgba(10,10,10,0.5);
+            //background-color: #0a0a0a;
+            //opacity: 0.5;
+        }
+
+
+		.modal {
+            display: none;
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: transparent;
+            margin: 5% auto;
+            padding: 20px;
+            width: 645px;
+            height: 770px;
+            background-image: url("{% static 'img/modalimg.png' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+        <!--calc(100% - 120px)-->
+            justify-content: space-between;
+        }
+
+        #modal-title {
+            margin-block-start: 0.3em;
+            margin-block-end: 0.3em;
+        }
+
+        #modal-address {
+            margin-block-start: 0.45em;
+            margin-block-end: 0.1em;
+        }
+
+
+        #modal-text {
+            text-align: justify;
+            margin-block-start: 0.25em;
+            font-family: Montserrat-Regular;
+            src: url({% static 'fonts/Montserrat-Regular.ttf' %})
+        }
+
+        #modal-controls{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+
+        #modal-images {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .modal-img {
+            height: 200px;
+            width: 200px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+
+        }
+
+        #lang {
+          position: fixed;
+          right: 20px;
+          top: 20px;
+          z-index: 2;
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            width: 140px;
+        }
+
+        .dropbtn
+        {
+          background: url('http://icons.iconarchive.com/icons/custom-icon-design/flag-3/16/Russia-Flag-icon.png') no-repeat left center;
+          padding-left: 25px;
+          width: 40px;
+        }
+
+        .dropbtn::after {
+            background: rgba(0, 0, 0, 0) url("https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_keyboard_arrow_down_48px-16.png") no-repeat scroll center center;
+            content: "";
+            height: 16px;
+            position: absolute;
+            right: 0;
+            top: 7px;
+            width: 16px;
+        }
+
+        .dropdown-content a:first-child
+        {
+          background: url('http://icons.iconarchive.com/icons/custom-icon-design/flag-3/16/Russia-Flag-icon.png') no-repeat left center;
+        }
+
+        .dropdown-content a:last-child
+        {
+          background: url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left center;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 2px 0 2px 25px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #f1f1f1}
+
+        /* Show the dropdown menu on hover */
+        #lang:hover .dropdown-content {
+            display: block;
+        }
+
+<!--        #rating-hider {-->
+<!--            position: absolute;-->
+<!--            top: 0;-->
+<!--            left: 0;-->
+<!--            width: 150px;-->
+<!--            height: 50px;-->
+<!--            background-image: url({% static 'img/hider.png' %});-->
+<!--        }-->
+        #rating-hider-yandex {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 25px;
+            height: 50px;
+            background-color: #F6F6F6;
+        }
+
+        #rating-hider-text {
+            position: absolute;
+            top: 25px;
+            left: 0;
+            width: 150px;
+            height: 25px;
+            background-color: #F6F6F6;
+        }
+
+
+  </style>
+</head>
+<body>
+    <div id="headLine">
+        <h1 align="center">Путеводитель по городу Саранск</h1>
+    </div>
+<!--    <div id="header" style="position: sticky;">-->
+<!--       <h1 align="center">Путеводитель по городу Саранск</h1>-->
+<!--    </div>-->
+
+  <!--<h1 align="center" id="header" style="position: sticky;">Путеводитель по городу Саранск</h1>-->
+  <div id="mapContainer">
+
+    <img src="{% static 'img/map.png' %}" alt="map" id="map" style="position: absolute; left: 0px; top: 20px;">
+    <img src="{% static 'img/point.png' %}" alt="point1" class="point" style="position: absolute; left: 2003px; top: 1300px;" onclick="showModal(1)">
+    <img src="{% static 'img/point.png' %}" alt="point2" class="point" style="position: absolute; left: 1945px; top: 1320px;" onclick="showModal(2)">
+	<img src="{% static 'img/point.png' %}" alt="point3" class="point" style="position: absolute; left: 1945px; top: 1350px;" onclick="showModal(3)">
+	<img src="{% static 'img/point.png' %}" alt="point4" class="point" style="position: absolute; left: 1950px; top: 1520px;" onclick="showModal(4)">
+	<img src="{% static 'img/point.png' %}" alt="point5" class="point" style="position: absolute; left: 2005px; top: 1455px;" onclick="showModal(5)">
+	<img src="{% static 'img/point.png' %}" alt="point6" class="point" style="position: absolute; left: 2100px; top: 1445px;" onclick="showModal(6)">
+	<img src="{% static 'img/point.png' %}" alt="point7" class="point" style="position: absolute; left: 2126px; top: 1452px;" onclick="showModal(7)">
+	<img src="{% static 'img/point.png' %}" alt="point8" class="point" style="position: absolute; left: 1890px; top: 1440px;" onclick="showModal(8)">
+	<img src="{% static 'img/point.png' %}" alt="point9" class="point" style="position: absolute; left: 2080px; top: 1190px;" onclick="showModal(9)">
+	<img src="{% static 'img/point.png' %}" alt="point10" class="point" style="position: absolute; left: 1767px; top: 1228px;" onclick="showModal(10)">
+	<img src="{% static 'img/point.png' %}" alt="point11" class="point" style="position: absolute; left: 1972px; top: 1440px;" onclick="showModal(11)">
+	<img src="{% static 'img/point.png' %}" alt="point12" class="point" style="position: absolute; left: 1920px; top: 1500px;" onclick="showModal(12)">
+	<img src="{% static 'img/point.png' %}" alt="point13" class="point" style="position: absolute; left: 2000px; top: 1530px;" onclick="showModal(13)">
+	<img src="{% static 'img/point.png' %}" alt="point14" class="point" style="position: absolute; left: 2273px; top: 1420px;" onclick="showModal(14)">
+	<img src="{% static 'img/point.png' %}" alt="point15" class="point" style="position: absolute; left: 2550px; top: 1330px;" onclick="showModal(15)">
+	<img src="{% static 'img/point.png' %}" alt="point17" class="point" style="position: absolute; left: 2040px; top: 1440px;" onclick="showModal(17)">
+	<img src="{% static 'img/point.png' %}" alt="point18" class="point" style="position: absolute; left: 2015px; top: 1320px;" onclick="showModal(18)">
+	<img src="{% static 'img/point.png' %}" alt="point19" class="point" style="position: absolute; left: 1100px; top: 678px;" onclick="showModal(19)">
+	<img src="{% static 'img/point.png' %}" alt="point20" class="point" style="position: absolute; left: 2030px; top: 1580px;" onclick="showModal(20)">
+	<img src="{% static 'img/point.png' %}" alt="point21" class="point" style="position: absolute; left: 2030px; top: 1450px;" onclick="showModal(21)">
+	<img src="{% static 'img/point.png' %}" alt="point22" class="point" style="position: absolute; left: 2065px; top: 1523px;" onclick="showModal(22)">
+	<img src="{% static 'img/point.png' %}" alt="point23" class="point" style="position: absolute; left: 2036px; top: 1480px;" onclick="showModal(23)">
+	<img src="{% static 'img/point.png' %}" alt="point24" class="point" style="position: absolute; left: 1950px; top: 1430px;" onclick="showModal(24)">
+	<img src="{% static 'img/point.png' %}" alt="point25" class="point" style="position: absolute; left: 2078px; top: 1100px;" onclick="showModal(25)">
+      <!-- Добавьте другие точки соответственно -->
+  </div>
+
+  <!--<div id="modal" class="modal">
+    <h2 id="modalTitle"></h2>
+    <p id="modalText"></p>
+    <img src="" alt="" id="modalImage" style="max-width: 100%;">
+  </div>-->
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h1 id="modal-title"></h1>
+            </div>
+            <div class="modal-body">
+                <div id="modal-images">
+                </div>
+                <h3 id="modal-address"></font></h3>
+                <div id="modal-controls">
+                    <div style="position: relative; top: 10px;">
+                        <iframe id="modal-frame" src="" width="150" height="50" frameborder="0"></iframe>
+                        <div id="rating-hider-yandex"></div>
+                        <div id="rating-hider-text"></div>
+                    </div>
+
+                    <audio id="modal-audio" controls src=""></audio>
+                </div>
+                <h2 id="modal-text"></h2>
+            </div>
+        </div>
+    </div>
+
+   <div id="lang">
+      <div class="dropbtn">RU</div>
+        <div class="dropdown-content">
+          <a href="#" onclick="selectLang('ru-RU')">RU</a>
+          <a href="#" onclick="selectLang('en-EN')">EN</a>
+      </div>
+   </div>
+
+  <script>
+
+    const pointData = {
+		1: {
+			"ru-RU": {
+				"title": "Площадь Тысячелетия",
+				"text": "Площадь Тысячелетия в Саранске появилась недавно и получила название в честь тысячелетней дружбы русского и мордовского народов. Раньше на этом месте был стадион, а сегодня здесь разместились торговые центры, рестораны, отели, жилые дома и учебные заведения. Главным зданием на площади является 'Огарёв Арена' - спортивный комплекс. Неподалеку расположен светомузыкальный фонтан 'Звезда Мордовии' и плитка, выложенная в традиционных мордовских узорах. Также здесь стоит 'Камень Тысячелетия', на котором изображена старинная карта Мордовии.",
+				"address": "Адрес: Республика Мордовия, Саранск, площадь Тысячелетия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/155005796895?type=rating",
+				"audio": "{% static 'sound/Millennium SquareRu.mp3' %}",
+				"images": [
+				    "{% static 'img/Millennium Square1.png' %}",
+				    "{% static 'img/Millennium Square2.png' %}",
+				    "{% static 'img/Millennium Square3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "Millennium Square",
+				"text": "Main Millennium Square in Saransk has recently appeared and was named in honour of the thousand-year friendship of the Russian and Mordovian peoples. There used to be a stadium on this place, but today it is home to shopping centres, restaurants, hotels, residential buildings and educational institutions. The main building on the square is the Ogaryov Arena, a sports complex. Nearby there is a light and music fountain 'Star of Mordovia' and tiles laid out in traditional Mordovian patterns. There is also the Millennium Stone, which depicts an old map of Mordovia.",
+				"address": "Address: Republic of Mordovia, Saransk, Millennium Square",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/155005796895?type=rating",
+				"audio": "{% static 'sound/Millennium SquareEn.mp3' %}",
+				"images": [
+				    "{% static 'img/Millennium Square1.png' %}",
+				    "{% static 'img/Millennium Square2.png' %}",
+				    "{% static 'img/Millennium Square3.png' %}"
+				]
+			}
+		},
+		2: {
+			"ru-RU": {
+				"title": "Музыкальный театр имени И. М. Яушева",
+				"text": "История Музыкального театра началась в далеком 1935 году. Он был назван в честь мордовского певца Иллариона Максимовича Яушева. Сейчас он пользуется не только популярностью у зрителей, но также и множеством наград с отечественных и зарубежных фестивалей. В 2011 году театр переехал в новое здание, сочетающее в себе национальные мотивы, классический стиль и элементы сценического искусства.",
+				"address": "Адрес: улица Богдана Хмельницкого, 36, Саранск, Республика Мордовия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1211218213?type=rating",
+				"audio": "{% static 'sound/I.M. Yaushev Musical TheatreRu.mp3' %}",
+				"images": [
+				    "{% static 'img/I.M. Yaushev Musical Theatre1.png' %}",
+				    "{% static 'img/I.M. Yaushev Musical Theatre2.png' %}",
+				    "{% static 'img/I.M. Yaushev Musical Theatre3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "I.M. Yaushev Musical Theatre",
+				"text": "The history of the Musical Theatre began in the distant 1935. It was named in honour of the Mordovian singer Illarion Maksimovich Yaushev. Now it enjoys not only popularity with the audience, but also many awards from domestic and foreign festivals. In 2011, the theatre moved into a new building combining national motifs, classical style and stage art elements.",
+				"address": "Address: Bogdan Khmelnitsky Street, 36, Saransk, Republic of Mordovia",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/155005796895?type=rating",
+				"audio": "{% static 'sound/I.M. Yaushev Musical TheatreEn.mp3' %}",
+				"images": [
+				    "{% static 'img/I.M. Yaushev Musical Theatre1.png' %}",
+				    "{% static 'img/I.M. Yaushev Musical Theatre2.png' %}",
+				    "{% static 'img/I.M. Yaushev Musical Theatre3.png' %}"
+				]
+			}
+		},
+		3: {
+			"ru-RU": {
+				"title": "Музей изобразительных искусств им. С. Д. Эрьзи",
+				"text": "Музей был создан больше 60 лет назад и за это время успел обзавестись внушительными коллекциями европейского, русского и мордовского искусства. Жемчужиной музея являются работы Степана Дмитриевича Эрьзи — выдающегося скульптора, уроженца Мордовии. Также нельзя не отметить обширную выставку декоративно-прикладного искусства, которая наглядно демонстрирует традиции и культурные особенности мордвы.",
+				"address": "Адрес: улица Коммунистическая, 61, Саранск, Республика Мордовия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1005143253?type=rating",
+				"audio": "{% static 'sound/Erzy MuseumRu.mp3' %}",
+				"images": [
+				    "{% static 'img/Erzy Museum1.png' %}",
+				    "{% static 'img/Erzy Museum2.png' %}",
+				    "{% static 'img/Erzy Museum3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "The S. D. Erzy Museum of Fine Arts",
+				"text": "The museum was established more than 60 years ago and during this time has managed to acquire impressive collections of European, Russian and Mordovian art. The jewel of the museum are the works of Stepan Dmitrievich Erizi - an outstanding sculptor, a native of Mordovia. One should also note the extensive exhibition of arts and crafts, which clearly demonstrates the traditions and cultural peculiarities of the Mordovians.",
+				"address": "Address: Kommunisticheskaya Street, 61, Saransk, Republic of Mordovia",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1005143253?type=rating",
+				"audio": "{% static 'sound/Erzy MuseumEn.mp3' %}",
+				"images": [
+				    "{% static 'img/Erzy Museum1.png' %}",
+				    "{% static 'img/Erzy Museum2.png' %}",
+				    "{% static 'img/Erzy Museum3.png' %}"
+				]
+			}
+		},
+		4: {
+			"ru-RU": {
+				"title": "Мордовский республиканский объединенный краеведческий музей",
+				"text": "Нынешний краеведческий музей в Саранске был официально создан 29 ноября 1918 года. Почти через год после этого группой энтузиастов-краеведов была организована первая экспозиция и музей открыл свои двери для посетителей. С течением времени фонды музея пополнялись, и теперь в Мордовском республиканском объединенном краеведческом музее можно увидеть обширные выставки, посвященные истории и культуре Мордовии в различные временные периоды. В музейных залах насчитывается несколько тысяч экспонатов, а в его архивах ещё больше.",
+				"address": "Адрес: Саранская улица, 2, Саранск, Республика Мордовия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1104820333?type=rating",
+				"audio": "{% static 'sound/Mordovian Republican United Local Lore MuseumRu.mp3' %}",
+				"images": [
+				    "{% static 'img/Mordovian Republican United Local Lore Museum1.png' %}",
+				    "{% static 'img/Mordovian Republican United Local Lore Museum2.png' %}",
+				    "{% static 'img/Mordovian Republican United Local Lore Museum3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "Mordovian Republican United Local Lore Museum",
+				"text": "The current local history museum in Saransk was officially established on 29 November 1918. Almost a year after that a group of enthusiastic local historians organised the first exposition and the museum opened its doors to visitors. Over time, the museum's funds have been replenished, and now the Mordovian Republican United Museum of Local Lore features extensive exhibitions devoted to the history and culture of Mordovia in various time periods. There are several thousand exhibits in the museum halls, and even more in its archives.",
+				"address": "Address: Saranskaya Street, 2, Saransk, Republic of Mordovia",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1104820333?type=rating",
+				"audio": "{% static 'sound/Mordovian Republican United Local Lore MuseumEn.mp3' %}",
+				"images": [
+				    "{% static 'img/Mordovian Republican United Local Lore Museum1.png' %}",
+				    "{% static 'img/Mordovian Republican United Local Lore Museum2.png' %}",
+				    "{% static 'img/Mordovian Republican United Local Lore Museum3.png' %}"
+				]
+			}
+		},
+		5: {
+			"ru-RU": {
+				"title": "Музей боевого и трудового подвига",
+				"text": "Мемориальный музей военного и трудового подвига 1941—1945 годов является частью мемориального комплекса воинской славы на площади Победы. Его открытие состоялось 6 мая 1995 года. Здание музея, имеет очертания границ Мордовии и крышу, которая стилизована под местный национальный женский головной убор — кокошник. На начало 2009 года фонды музея насчитывали 39 986 единиц хранения, включая уникальные документы, фотографии, личные вещи бойцов, военное снаряжение, фронтовые письма, награды, а также архивы известных военных деятелей, уроженцев Мордовии.",
+				"address": "Адрес: Советская улица, 34А, Саранск, Республика Мордовия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1008123258?type=rating",
+				"audio": "{% static 'sound/Museum of Military and Labour FeatsRu.mp3' %}",
+				"images": [
+				    "{% static 'img/Museum of Military and Labour Feats1.png' %}",
+				    "{% static 'img/Museum of Military and Labour Feats2.png' %}",
+				    "{% static 'img/Museum of Military and Labour Feats3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "Museum of Military and Labour Feats",
+				"text": "The Memorial Museum of Military and Labour Feats of 1941-1945 is part of the memorial complex of military glory on Victory Square. It was opened on 6 May 1995. The building of the museum has the outlines of the borders of Mordovia and the roof, which is stylised as a local national female headdress - a kokoshnik. At the beginning of 2009, the museum's holdings totalled 39,986 items, including unique documents, photographs, personal belongings of soldiers, military equipment, front letters, awards, as well as archives of famous military figures, natives of Mordovia.",
+				"address": "Address: Sovetskaya Street, 34A, Saransk, Republic of Mordovia",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1008123258?type=rating",
+				"audio": "{% static 'sound/Museum of Military and Labour FeatsEn.mp3' %}",
+				"images": [
+				    "{% static 'img/Museum of Military and Labour Feats1.png' %}",
+				    "{% static 'img/Museum of Military and Labour Feats2.png' %}",
+				    "{% static 'img/Museum of Military and Labour Feats3.png' %}"
+				]
+			}
+		},
+		6: {
+			"ru-RU": {
+				"title": "Национальный драматический театр",
+				"text": "Мордовский государственный национальный драматический театр — ведущий центр национального искусства в Республике Мордовия, представляющий 40 спектаклей разных жанров на русском и национальном языках. История театра началась в 1932 году с первого спектакля на эрзянском языке. Театр активно участвует в международных и региональных фестивалях и пользуется популярностью благодаря уникальному репертуару и наградам. ",
+				"address": "Адрес: Советская улица, 27, Саранск, Республика Мордовия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1072996893?type=rating",
+				"audio": "{% static 'sound/The Mordovian State National Drama TheatreRu.mp3' %}",
+				"images": [
+				    "{% static 'img/The Mordovian State National Drama Theatre1.png' %}",
+				    "{% static 'img/The Mordovian State National Drama Theatre2.png' %}",
+				    "{% static 'img/The Mordovian State National Drama Theatre3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "The Mordovian State National Drama Theatre",
+				"text": "The Mordovian State National Drama Theatre is the leading centre of national art in the Republic of Mordovia, presenting 40 performances of different genres in Russian and national languages. The history of the theatre began in 1932 with the first performance in the Erzyan language. The theatre actively participates in international and regional festivals and is popular thanks to its unique repertoire and awards.",
+				"address": "Address: Sovetskaya Street, 27, Saransk, Republic of Mordovia",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1072996893?type=rating",
+				"audio": "{% static 'sound/The Mordovian State National Drama TheatreEn.mp3' %}",
+				"images": [
+				    "{% static 'img/The Mordovian State National Drama Theatre1.png' %}",
+				    "{% static 'img/The Mordovian State National Drama Theatre2.png' %}",
+				    "{% static 'img/The Mordovian State National Drama Theatre3.png' %}"
+				]
+			}
+		},
+		7: {
+			"ru-RU": {
+				"title": "Музей мордовской народной культуры",
+				"text": "Музей мордовской народной культуры был открыт 6 октября 1999 года в здании, которое является памятником архитектуры начала ХХ века и принадлежало саранскому купцу К. Х. Бараблину до 1917 года. В музее представлено почти 4 тысячи экспонатов, включая коллекции мордовской народной одежды, бытовой утвари и сельскохозяйственных орудий. Здесь проводятся выставки, посвященные творчеству художников и тематические выставки, а также образовательные программы для молодежи республики. Театрализованный цикл «Календарные обряды, и мы» и «Мордовское гостеприимство» пользуются популярностью.",
+				"address": "Адрес: Советская улица, 19, Саранск, Республика Мордовия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1088353168?type=rating",
+				"audio": "{% static 'sound/The Museum of Mordovian Folk CultureRu.mp3' %}",
+				"images": [
+				    "{% static 'img/The Museum of Mordovian Folk Culture1.png' %}",
+				    "{% static 'img/The Museum of Mordovian Folk Culture2.png' %}",
+				    "{% static 'img/The Museum of Mordovian Folk Culture3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "The Museum of Mordovian Folk Culture",
+				"text": "The Museum of Mordovian Folk Culture was opened on 6 October 1999 in a building that is an architectural monument of the early twentieth century and belonged to the Saransk merchant and entrepreneur K. H. Barablin until 1917. The museum has almost 4 thousand exhibits, including collections of Mordovian folk clothes, icons, ceramics, household utensils, agricultural implements and tools. There are also various exhibitions devoted to the work of artists and thematic exhibitions, as well as educational programmes for children and young people of the republic. The theatrical cycle «Calendar Rites, and Us» and the programme «Mordovian Hospitality» are particularly popular.",
+				"address": "Address: Sovetskaya Street, 19, Saransk, Republic of Mordovia",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1088353168?type=rating",
+				"audio": "{% static 'sound/The Museum of Mordovian Folk CultureEn.mp3' %}",
+				"images": [
+				    "{% static 'img/The Museum of Mordovian Folk Culture1.png' %}",
+				    "{% static 'img/The Museum of Mordovian Folk Culture2.png' %}",
+				    "{% static 'img/The Museum of Mordovian Folk Culture3.png' %}"
+				]
+			}
+		},
+		8: {
+			"ru-RU": {
+				"title": "Русский драматический театр",
+				"text": "Государственный русский драматический театр Республики Мордовия — это удостоенный Государственной премии Республики Мордовия 2014 года профессиональный коллектив, который является лауреатом и победителем различных театральных фестивалей и конкурсов. Театр был основан 25 августа 1932 года, и в последние годы стал более известным в России и за рубежом. Международный фестиваль русских драматических театров «Соотечественники», проводимый в театре с 2005 года, получил широкий резонанс.",
+				"address": "Адрес: Советская улица, 60, Саранск, Республика Мордовия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1119734151?type=rating",
+				"audio": "{% static 'sound/Russian Drama TheatreRu.mp3' %}",
+				"images": [
+				    "{% static 'img/Russian Drama Theatre1.png' %}",
+				    "{% static 'img/Russian Drama Theatre2.png' %}",
+				    "{% static 'img/Russian Drama Theatre3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "Russian Drama Theatre",
+				"text": "The State Russian Drama Theatre of the Republic of Mordovia is a professional team awarded the 2014 State Prize of the Republic of Mordovia, which is a laureate and winner of various theatre festivals and competitions. The theatre was founded on 25 August 1932 and in recent years has become more famous in Russia and abroad. The International Festival of Russian Drama Theatres «Compatriots», held at the theatre since 2005, has received a wide resonance.",
+				"address": "Address: Sovetskaya Street, 60, Saransk, Republic of Mordovia",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1119734151?type=rating",
+				"audio": "{% static 'sound/Russian Drama TheatreEn.mp3' %}",
+				"images": [
+				    "{% static 'img/Russian Drama Theatre1.png' %}",
+				    "{% static 'img/Russian Drama Theatre2.png' %}",
+				    "{% static 'img/Russian Drama Theatre3.png' %}"
+				]
+			}
+		},
+		9: {
+			"ru-RU": {
+				"title": "Республиканский кукольный театр",
+				"text": "Государственный театр кукол Республики Мордовия был создан в 1938 году и активно участвует в различных смотрах, фестивалях и гастролях не только в Мордовии, но и в других регионах России. С 2017 года театр принимает участие в федеральной программе «Большие гастроли» и уже посетил множество городов. 7 декабря 2019 года театр открыл свой 82-й театральный сезон после капитального ремонта здания, осуществленного в рамках национального проекта «Культура». Репертуар театра основан на классических сказках и мордовском фольклоре.",
+				"address": "Адрес: улица Володарского, 90А, Саранск, Республика Мордовия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1113798482?type=rating",
+				"audio": "{% static 'sound/Republican Puppet TheatreRu.mp3' %}",
+				"images": [
+				    "{% static 'img/Republican Puppet Theatre1.png' %}",
+				    "{% static 'img/Republican Puppet Theatre2.png' %}",
+				    "{% static 'img/Republican Puppet Theatre3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "Republican Puppet Theatre",
+				"text": "The State Puppet Theatre of the Republic of Mordovia was established in 1938 and actively participates in various reviews, festivals and tours not only in Mordovia, but also in other regions of Russia. Since 2017, the theatre has been taking part in the federal programme «Big tours» and has already visited many cities. On December 7, 2019, the theatre opened its 82nd theatrical season after a major renovation of the building carried out within the framework of the national project «Culture». The theatre's repertoire is based on classic fairy tales and Mordovian folklore.",
+				"address": "Address: Volodarsky Street, 90A, Saransk, Republic of Mordovia",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1113798482?type=rating",
+				"audio": "{% static 'sound/Republican Puppet TheatreEn.mp3' %}",
+				"images": [
+				    "{% static 'img/Republican Puppet Theatre1.png' %}",
+				    "{% static 'img/Republican Puppet Theatre2.png' %}",
+				    "{% static 'img/Republican Puppet Theatre3.png' %}"
+				]
+			}
+		},
+		10: {
+			"ru-RU": {
+				"title": "Театр актера и куклы «Крошка»",
+				"text": "Саранский театр кукол был основан 17 сентября 1992 года в результате объединения двух учреждений - детского кинотеатра «Мордовия» и саранского театра «Крошка». За 30 лет своего существования театр создал около 65 спектаклей для зрителей различных возрастных групп, используя различные методы и системы кукольного искусства.",
+				"address": "Адрес: улица Полежаева, 159Г, Саранск, Республика Мордовия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1120773197?type=rating",
+				"audio": "{% static 'sound/Actor and Puppet TheatreRu.mp3' %}",
+				"images": [
+				    "{% static 'img/Actor and Puppet Theatre1.png' %}",
+				    "{% static 'img/Actor and Puppet Theatre2.png' %}",
+				    "{% static 'img/Actor and Puppet Theatre3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "Actor and Puppet Theatre «Kroshka»",
+				"text": "The Saransk Puppet Theatre was founded on 17 September 1992 as a result of the merger of two institutions - the children's cinema «Mordovia» and the Saransk theatre «Kroshka». For 30 years of its existence the theatre has created about 65 performances for audiences of different age groups, using various methods and systems of puppetry.",
+				"address": "Address: Polezhaeva Street, 159G, Saransk, Republic of Mordovia",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/1120773197?type=rating",
+				"audio": "{% static 'sound/Actor and Puppet TheatreEn.mp3' %}",
+				"images": [
+				    "{% static 'img/Actor and Puppet Theatre1.png' %}",
+				    "{% static 'img/Actor and Puppet Theatre2.png' %}",
+				    "{% static 'img/Actor and Puppet Theatre3.png' %}"
+				]
+			}
+		},
+			1: {
+			"ru-RU": {
+				"title": "Площадь Тысячелетия",
+				"text": "Площадь Тысячелетия в Саранске появилась недавно и получила название в честь тысячелетней дружбы русского и мордовского народов. Раньше на этом месте был стадион, а сегодня здесь разместились торговые центры, рестораны, отели, жилые дома и учебные заведения. Главным зданием на площади является 'Огарёв Арена' - спортивный комплекс. Неподалеку расположен светомузыкальный фонтан 'Звезда Мордовии' и плитка, выложенная в традиционных мордовских узорах. Также здесь стоит 'Камень Тысячелетия', на котором изображена старинная карта Мордовии.",
+				"address": "Адрес: Республика Мордовия, Саранск, площадь Тысячелетия",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/155005796895?type=rating",
+				"audio": "{% static 'sound/Millennium SquareRu.mp3' %}",
+				"images": [
+				    "{% static 'img/Millennium Square1.png' %}",
+				    "{% static 'img/Millennium Square2.png' %}",
+				    "{% static 'img/Millennium Square3.png' %}"
+				]
+			},
+			"en-EN": {
+				"title": "Millennium Square",
+				"text": "Main Millennium Square in Saransk has recently appeared and was named in honour of the thousand-year friendship of the Russian and Mordovian peoples. There used to be a stadium on this place, but today it is home to shopping centres, restaurants, hotels, residential buildings and educational institutions. The main building on the square is the Ogaryov Arena, a sports complex. Nearby there is a light and music fountain 'Star of Mordovia' and tiles laid out in traditional Mordovian patterns. There is also the Millennium Stone, which depicts an old map of Mordovia.",
+				"address": "Address: Republic of Mordovia, Saransk, Millennium Square",
+				"rating": "https://yandex.ru/sprav/widget/rating-badge/155005796895?type=rating",
+				"audio": "{% static 'sound/Millennium SquareEn.mp3' %}",
+				"images": [
+				    "{% static 'img/Millennium Square1.png' %}",
+				    "{% static 'img/Millennium Square2.png' %}",
+				    "{% static 'img/Millennium Square3.png' %}"
+				]
+			}
+		},
+	}
+
+
+    var currentPointId;
+
+	var modal = document.getElementById("modal");
+	var closeBtn = document.getElementsByClassName("close")[0];
+	var modalAudio = document.getElementById('modal-audio');
+
+    closeBtn.onclick = function () {
+        modalAudio.pause();
+        modal.style.display = "none";
+    };
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modalAudio.pause();
+            modal.style.display = "none";
+        }
+    };
+
+    function applyInfo(id) {
+      if (!(id in pointData)) return;
+      currentPointId = id;
+      var data = pointData[id][userLang];
+
+      var modalTitle = document.getElementById('modal-title');
+      var modalText = document.getElementById('modal-text');
+      var modalImages = document.getElementById('modal-images');
+      var modalFrame = document.getElementById('modal-frame');
+      var modalAddress = document.getElementById('modal-address');
+
+      modalTitle.textContent = data.title;
+      modalText.textContent = data.text;
+      //modalImage.src = data.img;
+      modalFrame.src = data.rating;
+      modalAudio.src = data.audio;
+      modalAddress.textContent = data.address;
+
+      modalImages.textContent = "";
+      data.images.forEach(image => {
+        var img = document.createElement("img");
+        img.src = image;
+        img.className = "modal-img";
+        modalImages.append(img);
+      });
+    }
+
+
+    function showModal(id) {
+      applyInfo(id);
+
+      var modal = document.getElementById('modal');
+      modal.style.display = 'block';
+    }
+
+    const langMap = {
+      "ru-RU": {
+        lang: "Ru",
+        flag: "url('http://icons.iconarchive.com/icons/custom-icon-design/flag-3/16/Russia-Flag-icon.png')"
+      },
+      "en-EN": {
+        lang: "En",
+        flag: "url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png')"
+      }
+    }
+
+    function selectLang(lang) {
+      userLang = lang;
+      var dropdown = document.getElementById('lang')
+      var dropbtn = dropdown.getElementsByClassName("dropbtn")[0];
+      dropbtn.textContent = langMap[userLang].lang;
+      dropbtn.style.backgroundImage = langMap[userLang].flag;
+      applyInfo(currentPointId);
+
+      window.localStorage.setItem("lang", lang);
+    }
+
+    if (window.localStorage.getItem("lang")) {
+      selectLang(window.localStorage.getItem("lang"));
+    } else {
+      selectLang(navigator.language || navigator.userLanguage);
+    }
+  </script>
+</body>
+</html>
